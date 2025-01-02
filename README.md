@@ -113,10 +113,389 @@
 // 타입 정의 파일 설치
 // devDependencies 에 추가 (개발 단계에서만 필요한 의존성)
 > npm install @types/lodash --save-dev
-
 ```
 
 <br/>
+
+---
+
+> ## 정적 타이핑
+
+### \* 타입 선언
+
+- 변수명 뒤에 타입 명시
+
+```
+// 변수 선언
+const foo: string = 'hello';
+
+// 함수 선언
+function multiply(x: number, y: number): number {
+    return x * y;
+}
+
+// OR 연산자로 리턴 타입 여러 개 지정 가능
+function foo(): string | undefined { ... }
+```
+
+<br/>
+
+### \* 정적 타이핑
+
+- 변수를 선언할 때 변수에 할당할 값의 타입에 따라 사전에 타입을 명시적으로 선언하고 선언한 타입에 맞는 값을 할당
+
+<br/>
+
+### \* 타입 추론
+
+- 타입스크립트는 정적 타입 언어이므로 타입을 선언하지 않더라도 타입 추론에 의해 변수의 타입이 결정된다. 이후 다른 타입의 값을 할당하면 에러가 발생한다.
+
+```
+// 자바스크립트 - 재할당 가능
+let var = 1;
+var = 'Hello';
+
+// 타입스크립트 - 재할당 불가능
+let var = 1;
+var = 'Hello'; // Error
+
+// 타입 미선언 시 any 타입 (사용 지양)
+let var;
+var = 1;
+var = 'Hello';
+```
+
+<br/>
+
+### \* 타입 캐스팅
+
+- 기존의 타입에서 다른 타입으로 타입 캐스팅 하려면 as 키워드 또는 <> 연산자 사용
+
+```
+// as
+const $input = document.querySelector('input[type="text"]') as HTMLInputElement;
+const val = $input.value;
+
+// <>
+const $input = <HTMLInputElement>document.querySelector('input[type="text"]');
+const val = $input.value;
+```
+
+#### ※ value 프로퍼티는 Element 타입의 하위 타입인 HTMLInputElement 타입에만 존재
+
+<br/>
+
+---
+
+> ## TypeScript - Class
+
+### \* 클래스 선언
+
+- 클래스 몸체에 클래스 프로퍼티를 사전에 선언하여야 한다.
+
+```
+class Person {
+    name: string; // 클래스 프로퍼티 선언
+
+    constructor(name: string) {
+        this.name = name;
+    }
+}
+```
+
+<br/>
+
+### \* 접근 제한자
+
+- public / protected / private
+- 선언하지 않을 경우 public (default)
+
+※ 접근 가능성은 기본적으로 동일 (클래스 내부, 자식 클래스 내부, 인스턴스)
+
+<br/>
+
+### \* 생성자 파라미터에 접근 제한자 선언
+
+1. 암묵적으로 클래스 프로퍼티로 선언
+2. 암묵적으로 생성자 초기화
+
+```
+// 접근 제한자 선언 O
+class Person {
+    constructor(private name: string) {};
+}
+
+// 접근 제한자 선언 X
+class Person {
+    constructor(name: string) {
+        console.log(name); // 생성자 내부에서만 유효한 지역 변수
+    };
+}
+```
+
+<br/>
+
+### \* readonly 키워드
+
+- readonly 키워드가 붙은 클래스 프로퍼티는 선언 시 또는 생성자 내부에서만 값을 할당 가능
+- 그 외 경우 재할당 금지. 읽기만 가능능
+- 상수 선언에 사용
+
+```
+class Foo {
+    private readonly MAX_LEN: number = 5; // 명시적 할당
+    private readonly MSG: string;
+
+    constructor() {
+        this.MSG = 'Hello'; // 생성자 내부 할당
+    }
+}
+```
+
+<br/>
+
+### \* static 키워드
+
+- 정적 프로퍼티, 메서드 정의
+- 클래스 이름으로 호출 (인스턴스로 호출 불가)
+
+```
+class Foo {
+    // 정적 프로퍼티
+    static staticProperty = 10;
+
+    constructor() {};
+
+    // 정적 메서드
+    static staticMethod() {
+        return 'staticMethod';
+    }
+}
+
+console.log(Foo.staticProperty);
+console.log(Foo.staticMethod());
+```
+
+<br/>
+
+### \* 추상 클래스 (abstract class)
+
+- 하나 이상의 추상 메서드 포함 (abstract 키워드)
+- 일반 메서드 포함 가능
+- 직접 인스턴스 생성 불가, 상속만을 위해 사용
+- 상속한 클래스는 추상 메서드 반드시 구현해야 함
+
+```
+abstract class Animal {
+    abstract makeSound(): void; // 추상 메서드
+
+    move(): void {
+        console.log("움직인다.");
+    }
+}
+
+class Dog extends Animal {
+    // 추상 메서드 구현
+    makeSound(): void {
+        console.log("멍멍!");
+    }
+}
+
+const myDog = new Dog();
+myDog.makeSound();
+myDog.move();
+```
+
+<br/>
+
+---
+
+> ## 인터페이스
+
+- 일반적으로 타입체크를 위해 사용되며 변수, 함수, 클래스에 사용할 수 있다.
+
+- 직접 인스턴스 생성 불가, 모든 메서드는 추상 메서드 (단, 추상 클래스처럼 abstract 키워드 사용 X)
+
+#### ※ 여러 타입을 갖는 프로퍼티로 이루어진 새로운 타입을 정의하는 것과 유사
+
+```
+// 변수 타입에 사용할 인터페이스 정의
+interface Todo {
+    id: number;
+    content: string;
+    completed: boolean;
+}
+
+// 변수 타입으로 사용
+let todo: Todo;
+let todos: Todo[] = [];
+
+// 함수 타입에 사용할 인터페이스 정의
+interface SquareFunc {
+    (num: number): number;
+}
+
+// 함수 타입으로 사용
+const squareFunc: SquareFunc = function (num: number) {
+    return num * num;
+};
+
+// 구현 클래스에 사용할 인터페이스 정의
+interface IPerson {
+    name: string;
+    sayHello(): void;
+}
+
+// 인터페이스 구현
+class Person implements IPerson {
+    constructor(public name: string) {}
+
+    sayHello(): void {
+        console.log(`Hello ${this.name}`);
+    }
+}
+```
+
+<br/>
+
+### \* 덕 타이핑 (Duck Typing) / 구조적 타이핑 (Structural Typing)
+
+- 해당 인터페이스에서 정의한 프로퍼티나 메서드를 가지고 있으면 그 인터페이스를 구현한 것으로 인정
+
+- 해당 경우 타입 체크에서 통과할 수 있으니 주의해야 함
+
+#### ※ 인터페이스는 자바스크립트 표준이 아니라 개발 단계에서 도움을 주기 위해 제공되는 기능. (트랜스파일링을 거치면 삭제 됨)
+
+```
+interface IPerson {
+    name: string;
+}
+
+function sayHello(person: IPerson): void {
+    console.log(`Hello ${person.name}`);
+}
+
+const me = {name: 'Lee', age: 30};
+sayHello(me); // IPerson 타입은 아니지만 타입 체크 통과
+```
+
+<br/>
+
+### \* 선택적 프로퍼티 (Optional Property)
+
+- 프로퍼티명 뒤에 ?를 붙이면 구현 시 생략 가능
+
+```
+interface UserInfo {
+    username: string;
+    password: string;
+    age?: number;     // 생략가능
+    address?: string; // 생략가능
+}
+
+const userInfo: UserInfo = {
+    username: 'Lee',
+    password: '1234'
+};
+```
+
+<br/>
+
+### \* 인터페이스 상속
+
+- extends 키워드를 사용하여 인터페이스 또는 클래스를 상속받을 수 있다.
+- 다중 상속 가능
+
+```
+interface Person {
+    name: string;
+    age?: number;
+}
+
+interface Studnet extends Person {
+    grade: number;
+}
+
+const student: Student = {
+    name: 'Lee',
+    age: 20,
+    grade: 3
+};
+```
+
+<br/>
+
+---
+
+> ## Type Alias
+
+- 새로운 타입을 정의 (인터페이스와 유사)
+- 원시 값, 유니온, 튜플 등도 타입 지정 가능
+- 상속 및 구현 불가
+
+#### ※ 인터페이스로 표현할 수 없거나, 유니온 또는 튜플을 사용해야할 때 사용
+
+```
+// 원시 타입
+type Str = "Lee";
+const strVar1: Str = "Lee";
+const strVar2: Str = "Kim"; // Error
+
+// 유니온 타입
+type Union = string | null;
+const unionVar1: Union = "Hello";
+const unionVar2: Union = null;
+const unionVar3: Union = 1; // Error
+
+// 튜플 타입
+type Tuple = [string, boolean];
+const t1: Tuple = ["Hello", true];
+const t2: Tuple = ["Hello", "World"]; // Error
+```
+
+<br/>
+
+---
+
+> ## 제네릭 (Generic)
+
+- 함수 또는 클래스를 정의하는 시점에 매개변수나 반환 값의 타입을 선언하기 어려운 경우 사용
+- 한 번의 선언으로 다양한 타입에 재사용 가능
+
+```
+class Queue<T> { // T: 타입 파라미터
+    protected data: Array<T> = [];
+
+    push(item: T) {
+        this.data.push(item);
+    }
+
+    pop(): T | undefined {
+        return this.data.shift();
+    }
+}
+
+// number 전용 Queue
+const numberQueue = new Queue<number>();
+numberQueue.push(0);
+numberQueue.push(1);
+
+console.log(numberQueue.pop()?.toFixed()); // 0
+console.log(numberQueue.pop()?.toFixed()); // 1
+console.log(numberQueue.pop()?.toFixed()); // undefined
+
+// string 전용 Queue
+const stringQueue = new Queue<string>();
+...
+```
+
+#### ※ 옵셔널 체이닝 (Optional Chaining)
+
+- ?. 연산자
+
+- 객체나 배열의 프로퍼티에 접근할 때, 해당 프로퍼티가 null 또는 undefined 인 경우 예외를 발생시키지 않고 undefined 를 반환
+
+- toFixed(), toUpperCase() 등 사용 시 null 또는 undefined 로 인한 에러 방지지
 
 ---
 

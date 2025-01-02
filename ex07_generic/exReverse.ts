@@ -1,5 +1,3 @@
-import { isArguments } from "lodash";
-
 function reverse<T>(items: T[]): T[] {
   return items.reverse();
 }

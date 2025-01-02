@@ -1,13 +1,4 @@
-/* 
-    * 타입 앨리어스 (Type Alias)
-        - 새로운 타입을 정의 (인터페이스와 유사)
-        - 원시 값, 유니온, 튜플 등도 타입 지정 사능
-        - 상속 및 구현 불가
-    
-    ※ 인터페이스로 표현할 수 없거나, 유니온 또는 튜플을 사용해야할 때 사용
-*/
-
-// interface 예시
+/* interface 예시 */
 export interface Person {
   name: string;
   age?: number;
@@ -17,7 +8,7 @@ const person = {} as Person; // 타입 캐스팅
 person.name = "Lee";
 person.age = 20;
 
-// type alias 예시
+/* type alias 예시 */
 type Person2 = {
   name: string;
   age?: number;

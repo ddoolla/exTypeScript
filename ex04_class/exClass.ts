@@ -1,10 +1,5 @@
-import { StringNullableChain } from "lodash";
-
-/*
-    * 타입스크립트 클래스
-        - 클래스 몸체에 클래스 프로퍼티를 사전 선언하여야 한다.
- */
-class Person {
+/* 클래스 선언 예제 */
+export class Person {
   name: string; // 클래스 프로퍼티를 사전 선언
 
   constructor(name: string) {
@@ -19,12 +14,7 @@ class Person {
 const person = new Person("Lee");
 person.walk();
 
-/*  
-    * 접근 제한자
-       - public / protected / private 
-       - 선언하지 않을 경우 public (default)
-*/
-
+/* 접근 제한자 예제 */
 class Foo {
   public x: string;
   protected y: string;
@@ -53,18 +43,9 @@ class Bar extends Foo {
   }
 }
 
-/*  
-    * 생성자 파라미터에 접근 제한자 선언
-      - 생성자 파라미터에 접근 제한자를 사용하면 
-        1. 암묵적으로 클래스 프로퍼티로 선언
-        2. 암묵적으로 생성자 초기화
-
-      - 생성자 파라미터에 접근 제한자를 선언하지 않으면
-        생성자 내부에서만 유효한 지역 변수
-*/
-
+/* 생성자 파라미터에 접근 제한자 선언 예제 */
 class Foo2 {
-  // 프로퍼티 자동 선언 x
+  // 프로퍼티 자동 선언
 
   constructor(public x: string, private y: string) {
     // 생성자 자동 초기화

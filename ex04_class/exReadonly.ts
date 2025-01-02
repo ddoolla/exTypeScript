@@ -1,9 +1,4 @@
-/*  
-    * readonly 키워드
-        - readonly 클래스 프로퍼티는 선언 시 또는 생성자 내부에서만 값을 할당 가능
-        - 상수 선언에 사용
-*/
-
+/* readonly 파라미터 예제 */
 export class Foo {
   private readonly MAX_LEN: number = 5;
   private readonly MSG: string;
