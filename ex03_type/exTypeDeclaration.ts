@@ -126,12 +126,3 @@ const today: Date = new Date();
 // Person
 class Person {}
 const person: Person = new Person();
-
-/* 
-    * 타입 추론 
-    타입스크립트는 정적 타입 언어이므로
-    타입을 선언하지 않더라도 타입 추론에 의해 변수의 타입이 결정된 이후
-    다른 타입의 값을 할당하면 에러가 발생한다.
-
-    타입을 생략하면 타입스크립트를 사용하는 의미가 없음
-*/

@@ -5,7 +5,7 @@
         - 인스턴스로 호출 불가
  */
 
-class Foo {
+export class Foo {
   private prop: any;
   static staticProperty = 10;
 
