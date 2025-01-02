@@ -27,8 +27,8 @@ const func1 = function () {
 const func2 = function () {
     console.log("Hello");
 };
-const func3 = () => {
-    return true;
-};
-console.log(func3());
+const shape1 = { x: 10, y: 20 };
+const shape2 = { r: 5 };
+const t1 = ["Hello", true];
+// const t2: Tuple = ["Hello", "world"]; // Error
 //# sourceMappingURL=exTypeAlias.js.map
